@@ -111,7 +111,7 @@ JOIN Cita ci ON c.id_cliente = ci.id_cliente
 JOIN Detalles d ON ci.id_detalle = d.id_detalle
 JOIN Servicio s ON d.id_servicio = s.id_servicio
 WHERE c.genero ILIKE 'Masculino'
-AND s.id_servicio = 4;
+AND s.id_servicio = 5;
 
 --QUERY PREGUNTA 5
 
@@ -166,18 +166,17 @@ ORDER BY c.mes, c.id_peluqueria, c.duracion DESC;
 
 --QUERY PREGUNTA 8
 
-SELECT p.id_peluqueria, p.nombre_peluqueria, s.nombre_servicio, s.precio_servicio
+SELECT DISTINCT ON (p.id_peluqueria)
+    p.id_peluqueria,
+    p.nombre_peluqueria,
+    s.nombre_servicio,
+    s.precio_servicio
 FROM Peluqueria p
 JOIN Cita c ON c.id_peluqueria = p.id_peluqueria
 JOIN Detalles d ON d.id_detalle = c.id_detalle
 JOIN Servicio s ON s.id_servicio = d.id_servicio
-WHERE (p.id_peluqueria, s.precio_servicio) IN (
-    SELECT c2.id_peluqueria, MAX(s2.precio_servicio)
-    FROM Cita c2
-    JOIN Detalles d2 ON d2.id_detalle = c2.id_detalle
-    JOIN Servicio s2 ON s2.id_servicio = d2.id_servicio
-    GROUP BY c2.id_peluqueria
-);
+ORDER BY p.id_peluqueria, s.precio_servicio DESC;
+
 
 --QUERY PREGUNTA 9
 
