@@ -111,7 +111,8 @@ JOIN Cita ci ON c.id_cliente = ci.id_cliente
 JOIN Detalles d ON ci.id_detalle = d.id_detalle
 JOIN Servicio s ON d.id_servicio = s.id_servicio
 WHERE c.genero ILIKE 'Masculino'
-AND s.id_servicio = 5;
+AND s.id_servicio = 5
+
 
 --QUERY PREGUNTA 5
 
