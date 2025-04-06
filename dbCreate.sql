@@ -1,3 +1,9 @@
+-- Crear la base de datos
+CREATE DATABASE mibasededatos;
+
+-- Conectarse a la base recién creada (esto solo funciona si lo ejecutás desde psql o con múltiples comandos separados)
+\c mibasededatos
+
 -- Tabla: Comuna
 CREATE TABLE Comuna (
     id_comuna SERIAL PRIMARY KEY,
