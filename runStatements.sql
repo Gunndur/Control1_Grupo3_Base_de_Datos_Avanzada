@@ -1,4 +1,4 @@
---QUERY PREGUNTA 1
+
 WITH CitasPorHorario AS (
     SELECT 
         c.id_peluqueria,
@@ -39,7 +39,15 @@ ORDER BY ch.fecha, ch.id_peluqueria;
 
 
 
---QUERY PREGUNTA 2
+
+
+
+
+
+
+
+
+
 WITH GastoMensual AS (
     SELECT 
         c.id_cliente,
@@ -70,7 +78,9 @@ SELECT DISTINCT ON (mes, id_peluqueria)
 FROM GastoMensual
 ORDER BY mes, id_peluqueria, total_gastado DESC;
 
---QUERY PREGUNTA 3
+
+
+
 WITH ingresos_mensuales AS (
     SELECT
         pe.id_peluqueria,
@@ -101,7 +111,8 @@ FROM ingresos_mensuales
 WHERE rn = 1
 ORDER BY mes DESC, peluqueria;
 
---QUERY PREGUNTA 4
+
+
 SELECT DISTINCT
 	c.id_cliente,
 	c.nombre_cliente,
@@ -111,10 +122,10 @@ JOIN Cita ci ON c.id_cliente = ci.id_cliente
 JOIN Detalles d ON ci.id_detalle = d.id_detalle
 JOIN Servicio s ON d.id_servicio = s.id_servicio
 WHERE c.genero ILIKE 'Masculino'
-AND s.id_servicio = 5
+AND s.id_servicio = 4;
 
 
---QUERY PREGUNTA 5
+
 
 SELECT DISTINCT
 	c.id_cliente,
@@ -133,7 +144,8 @@ JOIN Peluqueria p ON ci.id_peluqueria = p.id_peluqueria
 JOIN Pago pa ON d.id_pago = pa.id_pago
 WHERE s.id_servicio = 3;
 
---QUERY PREGUNTA 6
+
+
 SELECT DISTINCT ON (p.nombre_peluqueria, mes) 
     p.nombre_peluqueria,
     DATE_TRUNC('month', c.fecha_cita) AS mes,
@@ -146,7 +158,8 @@ WHERE c.fecha_cita BETWEEN '2018-01-01' AND '2029-12-31'
 GROUP BY p.nombre_peluqueria, mes, h.horario_inicio
 ORDER BY p.nombre_peluqueria, mes, total_citas DESC;
 
---QUERY PREGUNTA 7
+
+
 WITH Citas_Ordenadas AS (
     SELECT 
         c.id_peluqueria,
@@ -165,21 +178,24 @@ FROM Citas_Ordenadas c
 JOIN Cliente cl ON c.id_cliente = cl.id_cliente
 ORDER BY c.mes, c.id_peluqueria, c.duracion DESC;
 
---QUERY PREGUNTA 8
 
-SELECT DISTINCT ON (p.id_peluqueria)
-    p.id_peluqueria,
-    p.nombre_peluqueria,
-    s.nombre_servicio,
-    s.precio_servicio
+
+SELECT p.id_peluqueria, p.nombre_peluqueria, s.nombre_servicio, s.precio_servicio
 FROM Peluqueria p
 JOIN Cita c ON c.id_peluqueria = p.id_peluqueria
 JOIN Detalles d ON d.id_detalle = c.id_detalle
 JOIN Servicio s ON s.id_servicio = d.id_servicio
-ORDER BY p.id_peluqueria, s.precio_servicio DESC;
+WHERE (p.id_peluqueria, s.precio_servicio) IN (
+    SELECT c2.id_peluqueria, MAX(s2.precio_servicio)
+    FROM Cita c2
+    JOIN Detalles d2 ON d2.id_detalle = c2.id_detalle
+    JOIN Servicio s2 ON s2.id_servicio = d2.id_servicio
+    GROUP BY c2.id_peluqueria
+);
 
 
---QUERY PREGUNTA 9
+
+
 
 SELECT *
 FROM (
@@ -197,7 +213,9 @@ FROM (
 WHERE posicion = 1
 ORDER BY mes;
 
---QUERY PREGUNTA 10
+
+
+
 
 SELECT 
     com.nombre_comuna,
